@@ -128,7 +128,7 @@ workflow {
     //.first()
 
     // Fixed string to be concatenated
-    checkm2_db_string = 'databases/checkm2'
+    checkm2_db_string = 'databases/checkm2/checkm2_db_v2.dmnd'
     
     // Concatenate the fixed string to the data prefix to create a value channel
     checkm2_db = data_prefix_ch
