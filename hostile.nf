@@ -1,8 +1,6 @@
 // hostile.nf
 nextflow.enable.dsl = 2
 
-VERSION = '2.2.1' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
-
 process HOSTILE {
     // Container image for HOSTILE
 
@@ -13,11 +11,11 @@ process HOSTILE {
     memory '8 GB'
 
     // Kubernetes pod annotations (if applicable)
-    //pod annotation: 'scheduler.illumina.com/presetSize', value: 'fpga-medium'
-    //pod annotation: 'volumes.illumina.com/scratchSize', value: '1TiB'
+    pod annotation: 'scheduler.illumina.com/presetSize', value: 'fpga-medium'
+    pod annotation: 'volumes.illumina.com/scratchSize', value: '1TiB'
     
     // Publish outputs to the 'out' directory using symlinks
-    publishDir 'Results/HOSTILE', mode: 'symlink'
+    publishDir 'out/HOSTILE', mode: 'symlink'
     
     // Define inputs: sample ID and paired FASTQ files
     input:
@@ -52,10 +50,7 @@ process HOSTILE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        hostile: $VERSION
-
-        hostile_DB: \$(hostile --version)
-
+        hostile: \$(hostile --version 2>&1)
     END_VERSIONS
     """
 }

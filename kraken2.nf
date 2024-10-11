@@ -31,7 +31,7 @@ process KRAKEN2 {
     def args = task.ext.args ?: ''
     """
     kraken2 \\
-        --db ${kraken2_db} \\
+        --db ./${kraken2_db} \\
         --threads $task.cpus \\
         --report ${sample_id}.kraken2.report.txt \\
         --gzip-compressed \\

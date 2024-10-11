@@ -53,7 +53,7 @@ process ABRITAMR_aggregate {
 
     cpus 1
     
-    publishDir 'Results/summaries', mode: 'symlink'
+    publishDir 'out/summaries', mode: 'symlink'
     
     input:
         path reports

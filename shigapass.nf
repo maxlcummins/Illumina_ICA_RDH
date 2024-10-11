@@ -10,8 +10,8 @@ process SHIGAPASS {
     memory '8 GB'
     
     // Kubernetes pod annotations (if applicable)
-    //pod annotation: 'scheduler.illumina.com/presetSize', value: 'fpga-medium'
-    //pod annotation: 'volumes.illumina.com/scratchSize', value: '1TiB'
+    pod annotation: 'scheduler.illumina.com/presetSize', value: 'fpga-medium'
+    pod annotation: 'volumes.illumina.com/scratchSize', value: '1TiB'
     
     // Publish outputs to the 'out' directory using symlinks
     publishDir 'out/SHIGAPASS', mode: 'symlink'
@@ -62,7 +62,7 @@ process SHIGAPASS_aggregate {
     cpus 1
     
     // Publish outputs to the 'out' directory using symlinks
-    publishDir 'Results/summaries', mode: 'symlink'
+    publishDir 'out/summaries', mode: 'symlink'
     
     input:
         path reports

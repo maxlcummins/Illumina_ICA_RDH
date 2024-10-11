@@ -26,7 +26,7 @@ process EMMTYPER {
 
     script:
     """
-    makeblastdb -in alltrimmed.fa -dbtype nucl -title alltrimmed
+    makeblastdb -in ${emmtyper_db} -dbtype nucl -title alltrimmed
 
     emmtyper \\
         --blast_db ${emmtyper_db} \\
@@ -49,7 +49,7 @@ process EMMTYPER_aggregate {
     cpus 1
     
     // Publish outputs to the 'out' directory using symlinks
-    publishDir 'Results/summaries', mode: 'symlink'
+    publishDir 'out/summaries', mode: 'symlink'
     
     input:
         path reports

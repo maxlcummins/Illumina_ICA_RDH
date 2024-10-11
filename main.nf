@@ -87,6 +87,8 @@ workflow {
             }
         }
 
+    data_prefix_ch
+
     // Fixed string to be concatenated
     kraken_db_string = 'databases/k2_standard'
     
@@ -96,7 +98,6 @@ workflow {
     .collect()
     .first()
     
-    println "Kraken2 DB value:"
     kraken2_db.view()
 
     // Fixed string to be concatenated
@@ -108,9 +109,6 @@ workflow {
     .collect()
     .first()
     
-    println "emmtyper DB value:"
-    emmtyper_db.view()
-
     // Fixed string to be concatenated
     //mashscreen_db_string = 'databases/RefSeqSketchesDefaults.msh'
     
@@ -138,12 +136,8 @@ workflow {
     .collect()
     .first()
     
-    println "checkm2 DB value:"
-    checkm2_db.view()
-
-
     // Fixed string to be concatenated
-    hostile_db_string = 'hostile'
+    hostile_db_string = 'databases/hostile'
     
     // Concatenate the fixed string to the data prefix to create a value channel
     hostile_db = data_prefix_ch
@@ -151,9 +145,6 @@ workflow {
     .collect()
     .first()
     
-    println "Hostile DB value:"
-    hostile_db.view()
-
     // Step 2: Pass the paired samples to the SCRUBBER process
     hostile_out = HOSTILE(ch_samples, hostile_db)
     

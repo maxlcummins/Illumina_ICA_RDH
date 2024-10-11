@@ -56,7 +56,7 @@ process SISTR_aggregate {
     cpus 1
     
     // Publish outputs to the 'out' directory using symlinks
-    publishDir 'Results/summaries', mode: 'symlink'
+    publishDir 'out/summaries', mode: 'symlink'
     
     input:
         path reports
