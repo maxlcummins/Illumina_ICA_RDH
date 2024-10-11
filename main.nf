@@ -134,7 +134,7 @@ workflow {
     
     // Concatenate the fixed string to the data prefix to create a value channel
     checkm2_db = data_prefix_ch
-    .map { data_prefix -> data_prefix + scheckm2_db_string }
+    .map { data_prefix -> data_prefix + checkm2_db_string }
     .collect()
     .first()
     
