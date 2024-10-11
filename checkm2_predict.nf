@@ -14,7 +14,7 @@ process CHECKM2 {
     pod annotation: 'volumes.illumina.com/scratchSize', value: '100GiB'
     
     // Publish outputs to the 'out' directory using symlinks
-    publishDir 'out/CHECKM2', mode: 'symlink'
+    publishDir 'out', mode: 'symlink'
     
     // Define inputs: sample ID and assembly from SHOVILL
     input:

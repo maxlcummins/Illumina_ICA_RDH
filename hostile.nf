@@ -25,6 +25,7 @@ process HOSTILE {
     // Define outputs: sample ID and filtered FASTQ files
     output:
         tuple val(sample_id), path("${sample_id}_clean.R1.fastq.gz"), path("${sample_id}_clean.R2.fastq.gz"), emit: clean_reads
+        path "${sample}.hostile.log", emit: log
         path "versions.yml", emit: versions
     
     // Define the script to execute HOSTILE
@@ -42,7 +43,7 @@ process HOSTILE {
         --fastq2 ${sample_id}.R2.fastq.gz \
         --threads ${task.cpus} \
         --index human-t2t-hla.argos-bacteria-985_rs-viral-202401_ml-phage-202401 \
-        --out-dir ${sample_id}
+        --out-dir ${sample_id} > ${sample_id}.log
 
     mv ${sample_id}/${sample_id}.R1.clean_1.fastq.gz ${sample_id}_clean.R1.fastq.gz
 
