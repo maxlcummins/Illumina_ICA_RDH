@@ -10,8 +10,8 @@ process CHECKM2 {
     memory '16 GB'
     
     // Kubernetes pod annotations (if applicable)
-    pod annotation: 'scheduler.illumina.com/presetSize', value: 'standard-medium'
-    pod annotation: 'volumes.illumina.com/scratchSize', value: '100GiB'
+//    pod annotation: 'scheduler.illumina.com/presetSize', value: 'standard-medium'
+//    pod annotation: 'volumes.illumina.com/scratchSize', value: '100GiB'
     
     // Publish outputs to the 'out' directory using symlinks
     publishDir 'out/CHECKM2', mode: 'symlink'
