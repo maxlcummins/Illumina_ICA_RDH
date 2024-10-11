@@ -30,6 +30,7 @@ for (param in checkPathParamList) {
 
 // Import the FASTP and SHOVILL modules
 //include { SCRUBBER } from './scrubber.nf'
+include { HOSTILE } from './hostile.nf'
 include { RASUSA } from './rasusa.nf'
 include { FASTP } from './fastp.nf'
 include { SHOVILL } from './shovill.nf'
@@ -70,19 +71,94 @@ workflow {
 
     // View our samples
     ch_samples.view()
+    
+    // Define the regular expression pattern
+    pattern = /(.+\/data\/)/
+    
+    // Extract the data prefix from the first file path using regex and keep it as a channel
+    data_prefix_ch = ch_samples
+        .take(1)
+        .map { sample_id, read1, read2 ->
+            def m = (read1.toString() =~ pattern)
+            if (m) {
+                return m[0][1]
+            } else {
+                throw new Exception("Pattern not matched in path: ${read1}")
+            }
+        }
 
-    // Step 1b: define databases
-    emmtyper_db = Channel.value("/${params.database_dir}/emmtyper/alltrimmed.fa")
-    mashscreen_db = Channel.value("/${params.database_dir}/RefSeqSketchesDefaults.msh")
-    scrubber_db = Channel.value("/${params.database_dir}/human_filter.db.20240718v2")
-    checkm2_db = Channel.value("/${params.database_dir}/checkm2/checkm2_db_v2.dmnd")
-    kraken2_db = Channel.value("/${params.database_dir}/k2_standard")
+    // Fixed string to be concatenated
+    kraken_db_string = 'databases/k2_standard'
+    
+    // Concatenate the fixed string to the data prefix to create a value channel
+    kraken2_db = data_prefix_ch
+    .map { data_prefix -> data_prefix + kraken_db_string }
+    .collect()
+    .first()
+    
+    println "Kraken2 DB value:"
+    kraken2_db.view()
+
+    // Fixed string to be concatenated
+    emmtyper_db_string = 'databases/emmtyper/alltrimmed.fa'
+    
+    // Concatenate the fixed string to the data prefix to create a value channel
+    emmtyper_db = data_prefix_ch
+    .map { data_prefix -> data_prefix + emmtyper_db_string }
+    .collect()
+    .first()
+    
+    println "emmtyper DB value:"
+    emmtyper_db.view()
+
+    // Fixed string to be concatenated
+    //mashscreen_db_string = 'databases/RefSeqSketchesDefaults.msh'
+    
+    // Concatenate the fixed string to the data prefix to create a value channel
+    //mashscreen_db = data_prefix_ch
+    //.map { data_prefix -> data_prefix + mashscreen_db_string }
+    //.collect()
+    //.first()
+
+    // Fixed string to be concatenated
+    //scrubber_db_string = 'databases/human_filter.db.20240718v2'
+    
+    // Concatenate the fixed string to the data prefix to create a value channel
+    //scrubber_db = data_prefix_ch
+    //.map { data_prefix -> data_prefix + scrubber_db_string }
+    //.collect()
+    //.first()
+
+    // Fixed string to be concatenated
+    checkm2_db_string = 'databases/checkm2'
+    
+    // Concatenate the fixed string to the data prefix to create a value channel
+    checkm2_db = data_prefix_ch
+    .map { data_prefix -> data_prefix + scheckm2_db_string }
+    .collect()
+    .first()
+    
+    println "checkm2 DB value:"
+    checkm2_db.view()
+
+
+    // Fixed string to be concatenated
+    hostile_db_string = 'hostile'
+    
+    // Concatenate the fixed string to the data prefix to create a value channel
+    hostile_db = data_prefix_ch
+    .map { data_prefix -> data_prefix + hostile_db_string }
+    .collect()
+    .first()
+    
+    println "Hostile DB value:"
+    hostile_db.view()
 
     // Step 2: Pass the paired samples to the SCRUBBER process
-    //scrubber_out = SCRUBBER(ch_samples, scrubber_db)
+    hostile_out = HOSTILE(ch_samples, hostile_db)
     
     // Step 3: Pass the paired samples to the FASTP process
-    fastp_out = FASTP(ch_samples)
+    fastp_out = FASTP(hostile_out.clean_reads)
 
     // Step 4: Pass the paired samples to the RASUSA process
     rasusa_out = RASUSA(fastp_out.filt_clean_reads)
